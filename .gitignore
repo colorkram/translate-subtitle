@@ -1,0 +1,4 @@
+# ตัวอย่าง .gitignore
+node_modules/
+uploads/
+.env
