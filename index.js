@@ -1,13 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const fs = require('fs');
-const parseSrt = require('./utils/srtParser');
+import express from 'express';
+import fs from 'fs';
+import multer from 'multer';
+import Parser from 'srt-parser-2';
 
 const app = express();
-const upload = multer({ dest: 'uploads/' }); // อัปโหลดไฟล์ไปที่โฟลเดอร์ `uploads`
+const upload = multer({ dest: 'uploads/' });
+const parser = new Parser();
 
-app.use(bodyParser.json());
+
+// app.use(bodyParser.json());
 
 // อัปโหลดและแปลงไฟล์ SRT
 // app.post('/upload/:id', upload.single('file'), (req, res) => {
@@ -95,7 +96,7 @@ app.post('/all', upload.single('file'), (req, res) => {
             return res.status(500).json({ error: 'Failed to read file' });
         }
 
-        const subtitles = parseSrt(data);
+        const subtitles = parser.fromSrt(data, true);
         fs.unlinkSync(filePath);
 
         const map50data = [];
